@@ -27,4 +27,4 @@ Since all data lives only on your device, deleting the app deletes all of its da
 
 ## Contact
 
-Questions about this policy can be submitted via [GitHub Issues](https://github.com/sophiesaunders/BirthdayBox/issues) on this project's repository.
+Questions about this policy can be submitted via [GitHub Issues](https://github.com/sophiesaunders/BirthdayBuzz/issues) on this project's repository.

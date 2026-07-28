@@ -67,7 +67,7 @@ struct BirthdayProvider: TimelineProvider {
     }
 }
 
-struct BirthdayBoxWidgetView: View {
+struct BirthdayBuzzWidgetView: View {
     @Environment(\.widgetFamily) private var family
     @Environment(\.colorScheme) private var colorScheme
     var entry: BirthdayProvider.Entry
@@ -143,17 +143,17 @@ struct BirthdayBoxWidgetView: View {
                             .fontWeight(.semibold)
                             .lineLimit(1)
                             .truncationMode(.tail)
-                            .foregroundStyle(person.isOverdue ? BirthdayBoxWidgetView.overdueColor(for: colorScheme) : .primary)
+                            .foregroundStyle(person.isOverdue ? BirthdayBuzzWidgetView.overdueColor(for: colorScheme) : .primary)
                             .opacity(person.isAcknowledged ? 0.45 : 1.0)
                         Spacer(minLength: 2)
                         Button(intent: ToggleBirthdayIntent(personID: person.id.uuidString)) {
                             Image(systemName: person.isAcknowledged ? "checkmark.circle.fill" : "circle")
                                 .font(.system(size: 17))
-                                .foregroundStyle(person.isAcknowledged ? .green : (person.isOverdue ? BirthdayBoxWidgetView.overdueColor(for: colorScheme) : .secondary))
+                                .foregroundStyle(person.isAcknowledged ? .green : (person.isOverdue ? BirthdayBuzzWidgetView.overdueColor(for: colorScheme) : .secondary))
                         }
                         .buttonStyle(.plain)
                     }
-                    .font(.system(size: BirthdayBoxWidgetView.smallNameFontSize))
+                    .font(.system(size: BirthdayBuzzWidgetView.smallNameFontSize))
                     .frame(height: rowHeight, alignment: .center)
                 }
                 if extraCount > 0 {
@@ -205,7 +205,7 @@ struct BirthdayBoxWidgetView: View {
                             Text(person.name)
                                 .fontWeight(.semibold)
                                 .lineLimit(1)
-                                .foregroundStyle(person.isOverdue ? BirthdayBoxWidgetView.overdueColor(for: colorScheme) : .primary)
+                                .foregroundStyle(person.isOverdue ? BirthdayBuzzWidgetView.overdueColor(for: colorScheme) : .primary)
                             if person.isOverdue, let daysOverdue = person.daysOverdue {
                                 Text(daysOverdue == 1 ? "1 day overdue" : "\(daysOverdue) days overdue")
                                     .foregroundStyle(.secondary)
@@ -221,7 +221,7 @@ struct BirthdayBoxWidgetView: View {
                         Button(intent: ToggleBirthdayIntent(personID: person.id.uuidString)) {
                             Image(systemName: person.isAcknowledged ? "checkmark.circle.fill" : "circle")
                                 .font(.system(size: checkboxSize))
-                                .foregroundStyle(person.isAcknowledged ? .green : (person.isOverdue ? BirthdayBoxWidgetView.overdueColor(for: colorScheme) : .secondary))
+                                .foregroundStyle(person.isAcknowledged ? .green : (person.isOverdue ? BirthdayBuzzWidgetView.overdueColor(for: colorScheme) : .secondary))
                         }
                         .buttonStyle(.plain)
                     }
@@ -244,12 +244,12 @@ struct BirthdayBoxWidgetView: View {
     }
 }
 
-struct BirthdayBoxWidget: Widget {
-    let kind: String = "BirthdayBoxWidget"
+struct BirthdayBuzzWidget: Widget {
+    let kind: String = "BirthdayBuzzWidget"
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: BirthdayProvider()) { entry in
-            BirthdayBoxWidgetView(entry: entry)
+            BirthdayBuzzWidgetView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
         .configurationDisplayName("Today's Birthdays")
@@ -260,14 +260,14 @@ struct BirthdayBoxWidget: Widget {
 }
 
 @main
-struct BirthdayBoxWidgetBundle: WidgetBundle {
+struct BirthdayBuzzWidgetBundle: WidgetBundle {
     var body: some Widget {
-        BirthdayBoxWidget()
+        BirthdayBuzzWidget()
     }
 }
 
 #Preview("Small - 1 person", as: .systemSmall) {
-    BirthdayBoxWidget()
+    BirthdayBuzzWidget()
 } timeline: {
     BirthdayEntry(date: .now, people: [
         PersonSnapshot(id: UUID(), name: "Julia", emoji: "🎂", isAcknowledged: false, isOverdue: false, daysOverdue: nil, turningAge: 36)
@@ -275,7 +275,7 @@ struct BirthdayBoxWidgetBundle: WidgetBundle {
 }
 
 #Preview("Small - 5 people", as: .systemSmall) {
-    BirthdayBoxWidget()
+    BirthdayBuzzWidget()
 } timeline: {
     BirthdayEntry(date: .now, people: [
         PersonSnapshot(id: UUID(), name: "Julia", emoji: "🎂", isAcknowledged: false, isOverdue: false, daysOverdue: nil, turningAge: 36),
@@ -287,13 +287,13 @@ struct BirthdayBoxWidgetBundle: WidgetBundle {
 }
 
 #Preview("Small - empty", as: .systemSmall) {
-    BirthdayBoxWidget()
+    BirthdayBuzzWidget()
 } timeline: {
     BirthdayEntry(date: .now, people: [])
 }
 
 #Preview("Medium - 2 people", as: .systemMedium) {
-    BirthdayBoxWidget()
+    BirthdayBuzzWidget()
 } timeline: {
     BirthdayEntry(date: .now, people: [
         PersonSnapshot(id: UUID(), name: "Julia", emoji: "🎂", isAcknowledged: false, isOverdue: false, daysOverdue: nil, turningAge: 36),
@@ -302,7 +302,7 @@ struct BirthdayBoxWidgetBundle: WidgetBundle {
 }
 
 #Preview("Medium - 4 people", as: .systemMedium) {
-    BirthdayBoxWidget()
+    BirthdayBuzzWidget()
 } timeline: {
     BirthdayEntry(date: .now, people: [
         PersonSnapshot(id: UUID(), name: "Julia", emoji: "🎂", isAcknowledged: false, isOverdue: false, daysOverdue: nil, turningAge: 36),
@@ -313,7 +313,7 @@ struct BirthdayBoxWidgetBundle: WidgetBundle {
 }
 
 #Preview("Small - overdue", as: .systemSmall) {
-    BirthdayBoxWidget()
+    BirthdayBuzzWidget()
 } timeline: {
     BirthdayEntry(date: .now, people: [
         PersonSnapshot(id: UUID(), name: "Julia", emoji: "🎂", isAcknowledged: false, isOverdue: false, daysOverdue: nil, turningAge: 36),
@@ -322,7 +322,7 @@ struct BirthdayBoxWidgetBundle: WidgetBundle {
 }
 
 #Preview("Medium - overdue", as: .systemMedium) {
-    BirthdayBoxWidget()
+    BirthdayBuzzWidget()
 } timeline: {
     BirthdayEntry(date: .now, people: [
         PersonSnapshot(id: UUID(), name: "Julia", emoji: "🎂", isAcknowledged: false, isOverdue: false, daysOverdue: nil, turningAge: 36),
@@ -332,7 +332,7 @@ struct BirthdayBoxWidgetBundle: WidgetBundle {
 }
 
 #Preview("Medium - 6 people (overflow)", as: .systemMedium) {
-    BirthdayBoxWidget()
+    BirthdayBuzzWidget()
 } timeline: {
     BirthdayEntry(date: .now, people: [
         PersonSnapshot(id: UUID(), name: "Julia", emoji: "🎂", isAcknowledged: false, isOverdue: false, daysOverdue: nil, turningAge: 36),

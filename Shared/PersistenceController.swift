@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 enum AppGroup {
-    static let identifier = "group.com.sophiesaunders.birthdaybox"
+    static let identifier = "group.com.sophiesaunders.birthdaybuzz"
 }
 
 enum PersistenceController {
@@ -17,7 +17,7 @@ enum PersistenceController {
             fatalError("Could not find App Group container. Did you set up the App Group capability in Xcode?")
         }
 
-        let storeURL = groupURL.appendingPathComponent("BirthdayBox.sqlite")
+        let storeURL = groupURL.appendingPathComponent("BirthdayBuzz.sqlite")
         let configuration = ModelConfiguration(schema: schema, url: storeURL)
 
         do {

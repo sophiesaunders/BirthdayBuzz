@@ -36,11 +36,21 @@ struct PersonListView: View {
                                             .foregroundStyle(.secondary)
                                     }
                                 }
-                                Text(subtitle(for: person))
+                                // Truncated Text measures slightly wider than the width it's
+                                // assigned (due to the "..." not being taken into account),
+                                // which causes the whole row to shift and re-center.
+                                // Instead, use an overlay to force the alignment.
+                                Text(" ")
                                     .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                    .lineLimit(1)
-                                    .truncationMode(.tail)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .overlay(alignment: .leading) {
+                                        Text(subtitle(for: person))
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                            .lineLimit(1)
+                                            .truncationMode(.tail)
+                                    }
+                                    .clipped()
                             }
                         }
                     }

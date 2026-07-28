@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct BirthdayBoxApp: App {
+struct BirthdayBuzzApp: App {
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {

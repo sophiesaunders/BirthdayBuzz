@@ -37,11 +37,11 @@ out — a small, recurring checklist rather than a one-off alert.
 ## Project structure
 
 ```
-BirthdayBox/
+BirthdayBuzz/
 ├── Shared/                 Model + persistence + notification logic
 │                           (used by both the app and the widget)
-├── BirthdayBoxApp/          Main app target: views for Today / Everyone / Add-Edit
-└── BirthdayBoxWidget/       Widget extension: timeline provider, widget view, tap intent
+├── BirthdayBuzz/           Main app target: views for Today / Everyone / Add-Edit
+└── BirthdayBuzzWidget/     Widget extension: timeline provider, widget view, tap intent
 ```
 
 ## Requirements
@@ -58,8 +58,7 @@ BirthdayBox/
 - [ ] Add lock screen widget functionality
 - [ ] Allow import of birthdays from contacts
 - [ ] Show a checkbox for a moment when checking off an overdue person
-- [ ] Fully update BirthdayBox to BirthdayBuzz
-- [ ] Bug: When "Notes" are longer than the space available, emoji gets bumped to the side
+- [x] Fully rename everything from the old app name to Birthday Buzz
 
 ## Testing
 
