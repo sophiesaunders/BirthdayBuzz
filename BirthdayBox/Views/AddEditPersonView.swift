@@ -17,6 +17,7 @@ struct AddEditPersonView: View {
     @State private var notes: String = ""
     @State private var showingEmojiPicker = false
     @FocusState private var notesFocused: Bool
+    @FocusState private var nameFocused: Bool
 
     private let months = Array(1...12)
     private let days = Array(1...31)
@@ -35,25 +36,27 @@ struct AddEditPersonView: View {
                     }
                     #else
                     TextField("Name", text: $name)
+                        .focused($nameFocused)
                     #endif
-                    HStack {
-                        Text("Emoji")
-                        Spacer()
-                        Button {
-                            showingEmojiPicker = true
-                        } label: {
+                    Button {
+                        showingEmojiPicker = true
+                    } label: {
+                        HStack {
                             Text(emoji)
                                 .font(.system(size: 20))
                                 .frame(width: 36, height: 36)
                                 .background(.quaternary, in: RoundedRectangle(cornerRadius: 8))
+                            Spacer()
                         }
-                        .buttonStyle(.plain)
-                        .popover(isPresented: $showingEmojiPicker) {
-                            EmojiPickerView(selection: $emoji) {
-                                showingEmojiPicker = false
-                            }
-                            .presentationCompactAdaptation(.popover)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Emoji")
+                    .popover(isPresented: $showingEmojiPicker) {
+                        EmojiPickerView(selection: $emoji) {
+                            showingEmojiPicker = false
                         }
+                        .presentationCompactAdaptation(.popover)
                     }
                     .padding(.vertical, -6)
                 }
@@ -138,7 +141,14 @@ struct AddEditPersonView: View {
                         .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
-            .onAppear(perform: loadExisting)
+            .onAppear {
+                loadExisting()
+                #if os(iOS)
+                if person == nil {
+                    nameFocused = true
+                }
+                #endif
+            }
         }
         .frame(minWidth: 380, idealWidth: 420, maxWidth: 480)
     }

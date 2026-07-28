@@ -52,14 +52,18 @@ BirthdayBox/
 ## Features
 
 - [ ] Add Person: Add basic holidays (Mother's Day, Father's Day)
-- [ ] Display: Get a reminder ahead of time about an upcoming birthday (maybe optional)
+- [ ] Display: Get an optional reminder ahead of time about an upcoming birthday
+        Maybe: Add a star on the "everyone" page and if you star a person, you get
+        some advance warning/notification (that can be configured globally)
 - [ ] Add lock screen widget functionality
 - [ ] Allow import of birthdays from contacts
+- [ ] Show a checkbox for a moment when checking off an overdue person
+- [ ] Fully update BirthdayBox to BirthdayBuzz
+- [ ] Bug: When "Notes" are longer than the space available, emoji gets bumped to the side
 
 ## Testing
 
 - [x] Notifications: morning and night
-- [ ] Notifications: Only after adding a person for the first time
 - [x] Add Person: What if no date is set? -> Has default value, not possible
 - [x] Add Person: What if an invalid date is set? -> Jumps to next legitimate date
 - [x] Add Person: What if no name is set? -> "Save" button is grayed out
