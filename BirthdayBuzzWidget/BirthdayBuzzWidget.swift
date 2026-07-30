@@ -218,6 +218,7 @@ struct BirthdayBuzzWidgetView: View {
                 ForEach(displayed) { person in
                     HStack(spacing: 6) {
                         Text(person.emoji)
+                            .frame(width: 22, alignment: .center)
                         Text(person.name)
                             .fontWeight(.semibold)
                             .lineLimit(1)
@@ -281,6 +282,7 @@ struct BirthdayBuzzWidgetView: View {
                 ForEach(displayed) { person in
                     HStack(spacing: 10) {
                         Text(person.emoji)
+                            .frame(width: 24, alignment: .center)
                         HStack(spacing: 6) {
                             Text(person.name)
                                 .fontWeight(.semibold)
@@ -297,7 +299,8 @@ struct BirthdayBuzzWidgetView: View {
                             }
                         }
                         .opacity(person.isAcknowledged ? 0.45 : 1.0)
-                        Spacer(minLength: 8)
+                        .layoutPriority(1)
+                        Spacer(minLength: 2)
                         Button(intent: ToggleBirthdayIntent(personID: person.id.uuidString)) {
                             Image(systemName: person.isAcknowledged ? "checkmark.circle.fill" : "circle")
                                 .font(.system(size: checkboxSize))
