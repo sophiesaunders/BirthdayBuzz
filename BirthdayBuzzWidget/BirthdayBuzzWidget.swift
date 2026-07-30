@@ -224,6 +224,7 @@ struct BirthdayBuzzWidgetView: View {
                             .truncationMode(.tail)
                             .foregroundStyle(person.isOverdue ? BirthdayBuzzWidgetView.overdueColor(for: colorScheme) : .primary)
                             .opacity(person.isAcknowledged ? 0.45 : 1.0)
+                            .layoutPriority(1)
                         Spacer(minLength: 2)
                         Button(intent: ToggleBirthdayIntent(personID: person.id.uuidString)) {
                             Image(systemName: person.isAcknowledged ? "checkmark.circle.fill" : "circle")

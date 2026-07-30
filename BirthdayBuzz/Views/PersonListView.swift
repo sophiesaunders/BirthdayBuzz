@@ -1,12 +1,17 @@
 import SwiftUI
 import SwiftData
 import WidgetKit
+import UniformTypeIdentifiers
 
 struct PersonListView: View {
     @Query(sort: \Person.name) private var people: [Person]
     @Environment(\.modelContext) private var modelContext
     @State private var showingAddSheet = false
     @State private var editingPerson: Person?
+    @State private var exportDocument: PersonBackupDocument?
+    @State private var showingExporter = false
+    @State private var showingImporter = false
+    @State private var importResultMessage: String?
 
     private var sortedByUpcoming: [Person] {
         people.sorted { $0.daysUntilNextBirthday < $1.daysUntilNextBirthday }
@@ -72,6 +77,27 @@ struct PersonListView: View {
                         Image(systemName: "plus")
                     }
                 }
+                ToolbarItem(placement: .primaryAction) {
+                    Menu {
+                        Button {
+                            do {
+                                exportDocument = PersonBackupDocument(data: try PersonBackup.exportData(people: people))
+                                showingExporter = true
+                            } catch {
+                                importResultMessage = "Couldn't prepare export: \(error.localizedDescription)"
+                            }
+                        } label: {
+                            Label("Export…", systemImage: "square.and.arrow.up")
+                        }
+                        Button {
+                            showingImporter = true
+                        } label: {
+                            Label("Import…", systemImage: "square.and.arrow.down")
+                        }
+                    } label: {
+                        Image(systemName: "gearshape")
+                    }
+                }
             }
             .sheet(isPresented: $showingAddSheet) {
                 AddEditPersonView(person: nil)
@@ -88,6 +114,48 @@ struct PersonListView: View {
                     )
                 }
             }
+            .fileExporter(
+                isPresented: $showingExporter,
+                document: exportDocument,
+                contentType: .json,
+                defaultFilename: "BirthdayBuzz Backup"
+            ) { result in
+                if case .failure(let error) = result {
+                    importResultMessage = "Export failed: \(error.localizedDescription)"
+                }
+            }
+            .fileImporter(
+                isPresented: $showingImporter,
+                allowedContentTypes: [.json]
+            ) { result in
+                switch result {
+                case .success(let url):
+                    importPeople(from: url)
+                case .failure(let error):
+                    importResultMessage = "Import failed: \(error.localizedDescription)"
+                }
+            }
+            .alert("Import/Export", isPresented: .constant(importResultMessage != nil), presenting: importResultMessage) { _ in
+                Button("OK") { importResultMessage = nil }
+            } message: { message in
+                Text(message)
+            }
+        }
+    }
+
+    private func importPeople(from url: URL) {
+        let accessed = url.startAccessingSecurityScopedResource()
+        defer { if accessed { url.stopAccessingSecurityScopedResource() } }
+        do {
+            let data = try Data(contentsOf: url)
+            let result = try PersonBackup.importData(data, into: modelContext, existingPeople: people)
+            NotificationManager.refreshMorningNotifications(people: people)
+            NotificationManager.refreshEveningReminders(people: people)
+            WidgetCenter.shared.reloadAllTimelines()
+            importResultMessage = "Imported \(result.added) \(result.added == 1 ? "person" : "people")"
+                + (result.skipped > 0 ? ", skipped \(result.skipped) already in your list." : ".")
+        } catch {
+            importResultMessage = "Import failed: \(error.localizedDescription)"
         }
     }
 

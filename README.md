@@ -56,7 +56,7 @@ BirthdayBuzz/
         Maybe: Add a star on the "everyone" page and if you star a person, you get
         some advance warning/notification (that can be configured globally)
 - [ ] Allow import of birthdays from contacts
-- [ ] Import to / export from text file
+- [ ] Add delete button (per person) to the Edit page
 
 ## Testing
 
@@ -69,6 +69,7 @@ BirthdayBuzz/
 - [x] Today: What if the "Notes" are longer than the space allowed?
 - [x] Today: 0, 1, 2, 3, 4, etc. birthdays appearance
 - [x] Everyone: Delete a person
+- [ ] Same person repeated multiple times (same name, same birthday)
 
 ## App Store Submission
 
