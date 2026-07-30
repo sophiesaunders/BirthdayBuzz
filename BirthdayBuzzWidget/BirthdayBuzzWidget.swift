@@ -82,13 +82,21 @@ struct BirthdayBuzzWidgetView: View {
     }
 
     var body: some View {
-        if entry.people.isEmpty {
-            emptyState
-        } else {
-            switch family {
-            case .systemSmall:
+        switch family {
+        #if os(iOS)
+        case .accessoryCircular:
+            circularLayout
+        case .accessoryRectangular:
+            rectangularLayout
+        case .accessoryInline:
+            inlineLayout
+        #endif
+        default:
+            if entry.people.isEmpty {
+                emptyState
+            } else if family == .systemSmall {
                 smallLayout
-            default:
+            } else {
                 mediumLayout
             }
         }
@@ -107,6 +115,77 @@ struct BirthdayBuzzWidgetView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(8)
     }
+
+    #if os(iOS)
+    /// Lock screen circular: a big count of today's birthdays under a cake icon, like a gauge widget.
+    /// Falls back to the single person's emoji when there's exactly one.
+    private var circularLayout: some View {
+        let count = entry.people.count
+        return ZStack {
+            AccessoryWidgetBackground()
+            if count == 0 {
+                Image(systemName: "party.popper")
+                    .font(.system(size: 18))
+            } else if count == 1, let only = entry.people.first {
+                Text(only.emoji)
+                    .font(.system(size: 28))
+            } else {
+                VStack(spacing: 0) {
+                    Text("🎂")
+                        .font(.system(size: 14))
+                    Text("\(count)")
+                        .font(.system(size: 22, weight: .bold))
+                }
+            }
+        }
+    }
+
+    /// Lock screen rectangular: names in large, readable text (no small caption header, to
+    /// match the density of other lock screen widgets like Reminders).
+    private var rectangularLayout: some View {
+        let displayed = Array(entry.people.prefix(2))
+        let extraCount = entry.people.count - displayed.count
+
+        return VStack(alignment: .leading, spacing: 1) {
+            if entry.people.isEmpty {
+                Text("Birthdays")
+                    .font(.headline)
+                Text("None today")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            } else {
+                Text("Birthdays")
+                    .font(.headline)
+                ForEach(displayed) { person in
+                    Text("\(person.emoji) \(person.name)")
+                        .font(.subheadline)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                }
+                if extraCount > 0 {
+                    Text("+\(extraCount) more")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// Lock screen inline: single line next to the clock, e.g. "🎂 Julia, Sam +1".
+    private var inlineLayout: some View {
+        Group {
+            if entry.people.isEmpty {
+                Text("No birthdays today")
+            } else {
+                let displayed = entry.people.prefix(2)
+                let extraCount = entry.people.count - displayed.count
+                let names = displayed.map { "\($0.emoji) \($0.name)" }.joined(separator: ", ")
+                Text(extraCount > 0 ? "\(names) +\(extraCount)" : names)
+            }
+        }
+    }
+    #endif
 
     /// Small widget: today's birthdays, capped at 5. Row height is computed from the
     /// worst-case cap (5 rows), not the actual count today — so sizing stays consistent
@@ -254,8 +333,16 @@ struct BirthdayBuzzWidget: Widget {
         }
         .configurationDisplayName("Today's Birthdays")
         .description("See and check off today's birthdays.")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies(Self.supportedFamilies)
         .contentMarginsDisabled()
+    }
+
+    private static var supportedFamilies: [WidgetFamily] {
+        var families: [WidgetFamily] = [.systemSmall, .systemMedium]
+        #if os(iOS)
+        families += [.accessoryCircular, .accessoryRectangular, .accessoryInline]
+        #endif
+        return families
     }
 }
 
@@ -330,6 +417,42 @@ struct BirthdayBuzzWidgetBundle: WidgetBundle {
         PersonSnapshot(id: UUID(), name: "MegMeg", emoji: "🥳", isAcknowledged: false, isOverdue: true, daysOverdue: 1, turningAge: nil)
     ])
 }
+
+#if os(iOS)
+#Preview("Circular - 2 people", as: .accessoryCircular) {
+    BirthdayBuzzWidget()
+} timeline: {
+    BirthdayEntry(date: .now, people: [
+        PersonSnapshot(id: UUID(), name: "Julia", emoji: "🎂", isAcknowledged: false, isOverdue: false, daysOverdue: nil, turningAge: 36),
+        PersonSnapshot(id: UUID(), name: "Sam", emoji: "🎉", isAcknowledged: false, isOverdue: false, daysOverdue: nil, turningAge: nil)
+    ])
+}
+
+#Preview("Circular - empty", as: .accessoryCircular) {
+    BirthdayBuzzWidget()
+} timeline: {
+    BirthdayEntry(date: .now, people: [])
+}
+
+#Preview("Rectangular - 3 people", as: .accessoryRectangular) {
+    BirthdayBuzzWidget()
+} timeline: {
+    BirthdayEntry(date: .now, people: [
+        PersonSnapshot(id: UUID(), name: "Julia", emoji: "🎂", isAcknowledged: false, isOverdue: false, daysOverdue: nil, turningAge: 36),
+        PersonSnapshot(id: UUID(), name: "Sam", emoji: "🎉", isAcknowledged: false, isOverdue: false, daysOverdue: nil, turningAge: nil),
+        PersonSnapshot(id: UUID(), name: "Ann Marie", emoji: "🎈", isAcknowledged: false, isOverdue: false, daysOverdue: nil, turningAge: 28)
+    ])
+}
+
+#Preview("Inline - 2 people", as: .accessoryInline) {
+    BirthdayBuzzWidget()
+} timeline: {
+    BirthdayEntry(date: .now, people: [
+        PersonSnapshot(id: UUID(), name: "Julia", emoji: "🎂", isAcknowledged: false, isOverdue: false, daysOverdue: nil, turningAge: 36),
+        PersonSnapshot(id: UUID(), name: "Sam", emoji: "🎉", isAcknowledged: false, isOverdue: false, daysOverdue: nil, turningAge: nil)
+    ])
+}
+#endif
 
 #Preview("Medium - 6 people (overflow)", as: .systemMedium) {
     BirthdayBuzzWidget()

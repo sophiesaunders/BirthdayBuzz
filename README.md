@@ -55,10 +55,8 @@ BirthdayBuzz/
 - [ ] Display: Get an optional reminder ahead of time about an upcoming birthday
         Maybe: Add a star on the "everyone" page and if you star a person, you get
         some advance warning/notification (that can be configured globally)
-- [ ] Add lock screen widget functionality
 - [ ] Allow import of birthdays from contacts
-- [ ] Show a checkbox for a moment when checking off an overdue person
-- [x] Fully rename everything from the old app name to Birthday Buzz
+- [ ] Import to / export from text file
 
 ## Testing
 

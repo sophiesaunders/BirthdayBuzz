@@ -39,6 +39,8 @@ struct AddEditPersonView: View {
                         .focused($nameFocused)
                     #endif
                     Button {
+                        nameFocused = false
+                        notesFocused = false
                         showingEmojiPicker = true
                     } label: {
                         HStack {
