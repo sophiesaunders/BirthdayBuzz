@@ -117,27 +117,19 @@ struct BirthdayBuzzWidgetView: View {
     }
 
     #if os(iOS)
-    /// Lock screen circular: a big count of today's birthdays under a cake icon, like a gauge widget.
-    /// Falls back to the single person's emoji when there's exactly one.
+    /// Lock screen circular: a ring showing how many of today's birthdays have been
+    /// acknowledged, with a party-popper symbol centered inside it. Closes fully once
+    /// everyone's checked off — and is already closed when there are none today, so
+    /// "nothing to do" reads unambiguously.
     private var circularLayout: some View {
-        let count = entry.people.count
-        return ZStack {
-            AccessoryWidgetBackground()
-            if count == 0 {
-                Image(systemName: "party.popper")
-                    .font(.system(size: 18))
-            } else if count == 1, let only = entry.people.first {
-                Text(only.emoji)
-                    .font(.system(size: 28))
-            } else {
-                VStack(spacing: 0) {
-                    Text("🎂")
-                        .font(.system(size: 14))
-                    Text("\(count)")
-                        .font(.system(size: 22, weight: .bold))
-                }
-            }
+        let total = entry.people.count
+        let acknowledged = entry.people.filter { $0.isAcknowledged }.count
+
+        return Gauge(value: total == 0 ? 1 : Double(acknowledged), in: 0...(total == 0 ? 1 : Double(total))) {
+            Image(systemName: "party.popper.fill")
+                .font(.system(size: 20))
         }
+        .gaugeStyle(.accessoryCircularCapacity)
     }
 
     /// Lock screen rectangular: names in large, readable text (no small caption header, to

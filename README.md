@@ -51,12 +51,13 @@ BirthdayBuzz/
 
 ## Features
 
-- [ ] Add Person: Add basic holidays (Mother's Day, Father's Day)
 - [ ] Display: Get an optional reminder ahead of time about an upcoming birthday
         Maybe: Add a star on the "everyone" page and if you star a person, you get
         some advance warning/notification (that can be configured globally)
 - [ ] Allow import of birthdays from contacts
-- [ ] Add delete button (per person) to the Edit page
+- [ ] Add delete button (per person) to the Edit Person page
+- [ ] Global settings to configure timing / disabling of morning and evening notifications
+- [ ] Add Person: Add basic holidays (Mother's Day, Father's Day) that auto-update date
 
 ## Testing
 
@@ -70,6 +71,8 @@ BirthdayBuzz/
 - [x] Today: 0, 1, 2, 3, 4, etc. birthdays appearance
 - [x] Everyone: Delete a person
 - [ ] Same person repeated multiple times (same name, same birthday)
+- [x] Import/Export behavior: happy path, repeat name+bday, same name different bday, etc.
+- [x] Lock screen widgets: Circle and rectangle, long names, many people, happy path
 
 ## App Store Submission
 
