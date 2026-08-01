@@ -16,6 +16,7 @@ struct AddEditPersonView: View {
     @State private var emoji: String = "🎂"
     @State private var notes: String = ""
     @State private var showingEmojiPicker = false
+    @State private var showingDeleteConfirmation = false
     @FocusState private var notesFocused: Bool
     @FocusState private var nameFocused: Bool
 
@@ -131,6 +132,14 @@ struct AddEditPersonView: View {
                         .lineLimit(1...4)
                     #endif
                 }
+                if person != nil {
+                    Section {
+                        Button("Delete Person", role: .destructive) {
+                            showingDeleteConfirmation = true
+                        }
+                        .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                }
             }
             .formStyle(.grouped)
             .navigationTitle(person == nil ? "Add Person" : "Edit Person")
@@ -150,6 +159,15 @@ struct AddEditPersonView: View {
                     nameFocused = true
                 }
                 #endif
+            }
+            .alert(
+                "Delete \(person?.name ?? "this person")?",
+                isPresented: $showingDeleteConfirmation
+            ) {
+                Button("Delete", role: .destructive) { deletePerson() }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This can't be undone.")
             }
         }
         .frame(minWidth: 380, idealWidth: 420, maxWidth: 480)
@@ -192,6 +210,15 @@ struct AddEditPersonView: View {
             modelContext.insert(newPerson)
             NotificationManager.requestAuthorizationIfNeeded()
         }
+        try? modelContext.save()
+        refreshNotifications()
+        WidgetCenter.shared.reloadAllTimelines()
+        dismiss()
+    }
+
+    private func deletePerson() {
+        guard let person else { return }
+        modelContext.delete(person)
         try? modelContext.save()
         refreshNotifications()
         WidgetCenter.shared.reloadAllTimelines()

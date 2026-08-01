@@ -55,7 +55,6 @@ BirthdayBuzz/
         Maybe: Add a star on the "everyone" page and if you star a person, you get
         some advance warning/notification (that can be configured globally)
 - [ ] Allow import of birthdays from contacts
-- [ ] Add delete button (per person) to the Edit Person page
 - [ ] Global settings to configure timing / disabling of morning and evening notifications
 - [ ] Add Person: Add basic holidays (Mother's Day, Father's Day) that auto-update date
 
