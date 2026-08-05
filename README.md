@@ -57,6 +57,8 @@ BirthdayBuzz/
 - [ ] Allow import of birthdays from contacts
 - [ ] Global settings to configure timing / disabling of morning and evening notifications
 - [ ] Add Person: Add basic holidays (Mother's Day, Father's Day) that auto-update date
+- [ ] Lock screen widget: Can we use our icon instead of generic one? Can we add checkbox
+        when all people are checked off?
 
 ## Testing
 
@@ -69,7 +71,7 @@ BirthdayBuzz/
 - [x] Today: What if the "Notes" are longer than the space allowed?
 - [x] Today: 0, 1, 2, 3, 4, etc. birthdays appearance
 - [x] Everyone: Delete a person
-- [ ] Same person repeated multiple times (same name, same birthday)
+- [x] Same person repeated multiple times (same name, same birthday)
 - [x] Import/Export behavior: happy path, repeat name+bday, same name different bday, etc.
 - [x] Lock screen widgets: Circle and rectangle, long names, many people, happy path
 
@@ -78,5 +80,5 @@ BirthdayBuzz/
 - [ ] Take screenshots on various devices
 - [ ] Test with large accessibility text (Settings -> Accessibility -> Display & Text Size)
 - [ ] Test with VoiceOver: Add accessibility naming e.g. for checkmarks
-- [ ] Test on smallest and largeset devices: iPhone SE, Pro Max, macOS
+- [ ] Test on smallest and largest devices: iPhone SE, Pro Max, macOS
 - [ ] Test on dark mode and light mode
