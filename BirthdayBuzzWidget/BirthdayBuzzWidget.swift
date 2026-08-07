@@ -124,12 +124,21 @@ struct BirthdayBuzzWidgetView: View {
     private var circularLayout: some View {
         let total = entry.people.count
         let acknowledged = entry.people.filter { $0.isAcknowledged }.count
+        let allAcknowledged = total == 0 || acknowledged == total
 
         return Gauge(value: total == 0 ? 1 : Double(acknowledged), in: 0...(total == 0 ? 1 : Double(total))) {
             Image(systemName: "party.popper.fill")
                 .font(.system(size: 20))
         }
         .gaugeStyle(.accessoryCircularCapacity)
+        .overlay {
+            if allAcknowledged {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 10, weight: .bold))
+                    .background(Circle().fill(.background))
+                    .offset(x: 7, y: 10)
+            }
+        }
     }
 
     /// Lock screen rectangular: names in large, readable text (no small caption header, to

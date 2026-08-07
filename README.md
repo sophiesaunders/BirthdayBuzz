@@ -57,8 +57,9 @@ BirthdayBuzz/
 - [ ] Allow import of birthdays from contacts
 - [ ] Global settings to configure timing / disabling of morning and evening notifications
 - [ ] Add Person: Add basic holidays (Mother's Day, Father's Day) that auto-update date
-- [ ] Lock screen widget: Can we use our icon instead of generic one? Can we add checkbox
-        when all people are checked off?
+- [ ] Lock screen widget: Can we use our icon instead of generic one?
+- [ ] Widgets: Read https://developer.apple.com/design/human-interface-guidelines/widgets/#Previews-and-placeholders
+        and make appropriate updates, e.g. coloring the "Add" button
 
 ## Testing
 
